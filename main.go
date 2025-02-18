@@ -1,6 +1,7 @@
 package main
 
 import (
+	"HomeRepCloud/controllers"
 	"HomeRepCloud/database"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -14,7 +15,7 @@ func main() {
 
 	// Initialize Router
 	router := initRouter()
-	router.Run(":8081")
+	router.Run("0.0.0.0:8081")
 }
 func initRouter() *gin.Engine {
 	router := gin.Default()
@@ -36,6 +37,9 @@ func initRouter() *gin.Engine {
 			}
 			c.Data(http.StatusOK, "image/png", data)
 		})
+		api.GET("/images/category/:category", controllers.GetImageByCategory)
+		api.GET("/image/:name", controllers.GetImageByName)
+		api.GET("/images", controllers.GetAllImages)
 
 	}
 	return router

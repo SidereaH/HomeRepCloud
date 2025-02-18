@@ -22,6 +22,6 @@ func Connect(connectionString string) {
 
 func Migrate() {
 	Instance.AutoMigrate(&models.Image{})
-
+	InitImages(Instance)
 	log.Println("Database Migration Completed!")
 }
