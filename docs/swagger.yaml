@@ -1,0 +1,64 @@
+basePath: /api
+host: localhost:8081
+info:
+  contact: {}
+  description: API для работы с изображениями в HomeRepCloud.
+  title: HomeRepCloud API
+  version: "1.0"
+paths:
+  /image/{name}:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает изображение по указанному названию
+      parameters:
+      - description: Название изображения
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - image/png
+      responses:
+        "200":
+          description: Изображение
+          schema:
+            type: file
+        "404":
+          description: Image not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Получить изображение по названию
+      tags:
+      - images
+  /images:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает список всех изображений
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Список изображений
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Получить все изображения
+      tags:
+      - images
+swagger: "2.0"
