@@ -1,27 +1,24 @@
 package database
 
 import (
-	"HomeRepCloud/models"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
+	"context"
+	"github.com/go-redis/redis/v8"
 	"log"
 )
 
-var Instance *gorm.DB
-var dbError error
+var ctx = context.Background()
+var RedisClient *redis.Client
 
-func Connect(connectionString string) {
-	Instance, dbError = gorm.Open(postgres.Open(connectionString), &gorm.Config{})
-	if dbError != nil {
-		log.Fatal(dbError)
-		panic("Cannot connect to DB")
+func Connect(addr, password string, db int) {
+	RedisClient = redis.NewClient(&redis.Options{
+		Addr:     addr,
+		Password: password,
+		DB:       db,
+	})
+
+	_, err := RedisClient.Ping(ctx).Result()
+	if err != nil {
+		log.Fatal("Cannot connect to Redis: ", err)
 	}
-
-	log.Println("Connected to Database!")
-}
-
-func Migrate() {
-	Instance.AutoMigrate(&models.Image{})
-	InitImages(Instance)
-	log.Println("Database Migration Completed!")
+	log.Println("Connected to Redis!")
 }
