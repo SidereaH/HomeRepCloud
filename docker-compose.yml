@@ -1,0 +1,31 @@
+
+services:
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_PASSWORD=${DB_PASSWORD}  # Используем пароль из .env
+    command: ["redis-server", "--requirepass", "${DB_PASSWORD}"]
+    volumes:
+      - redis_data:/data
+
+  go-app:
+    build:
+      context: .  # Указываем текущую директорию как контекст сборки
+      dockerfile: Dockerfile  # Указываем Dockerfile для сборки
+    container_name: go-app
+    ports:
+      - "${API_PORT}:${API_PORT}"  # Используем порт из .env
+    environment:
+      - API_PORT=${API_PORT}
+      - DB_ADDRESS=${DB_ADDRESS}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - API_ADDRESS=${API_ADDRESS}
+    depends_on:
+      - redis
+
+volumes:
+  redis_data:

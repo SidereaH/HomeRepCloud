@@ -6,19 +6,34 @@ import (
 	_ "HomeRepCloud/docs" // Импортируйте сгенерированную документацию
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	swaggerFiles "github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"
+	"log"
 	"net/http"
 	"os"
+	"strconv"
 )
 
 func main() {
-	database.Connect("localhost:6379", "", 0)
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+	db, err := strconv.Atoi(os.Getenv("DB_NAME"))
+	if err != nil {
+		log.Fatal("Change DB name to int")
+	}
+	database.Connect(
+		os.Getenv("DB_ADDRESS"),
+		os.Getenv("DB_PASSWORD"),
+		db,
+	)
 	database.InitImages()
 
 	// Initialize Router
 	router := initRouter()
-	router.Run(":8081")
+	router.Run(os.Getenv("API_ADDRESS") + ":" + os.Getenv("API_PORT"))
 }
 
 // @title HomeRepCloud API
