@@ -66,6 +66,7 @@ func initRouter() *gin.Engine {
 		api.GET("/images/category/:category", controllers.GetImageByCategory)
 		api.GET("/image/:name", controllers.GetImageByName)
 		api.GET("/images", controllers.GetAllImages)
+		api.POST("/images/save", controllers.SaveImage)
 	}
 
 	// Swagger UI
