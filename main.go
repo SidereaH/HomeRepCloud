@@ -6,7 +6,6 @@ import (
 	_ "HomeRepCloud/docs" // Импортируйте сгенерированную документацию
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 	swaggerFiles "github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"
 	"log"
@@ -16,10 +15,10 @@ import (
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	//err := godotenv.Load()
+	//if err != nil {
+	//	log.Fatal("Error loading .env file")
+	//}
 	db, err := strconv.Atoi(os.Getenv("DB_NAME"))
 	if err != nil {
 		log.Fatal("Change DB name to int")
